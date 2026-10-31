@@ -1,0 +1,11 @@
+node_modules
+*.log
+.DS_Store
+.vercel
+
+# plant documents stay on this computer: never commit or deploy them
+*.xlsx
+*.xlsm
+*.xls
+*.pdf
+Cause and effect sheets/
