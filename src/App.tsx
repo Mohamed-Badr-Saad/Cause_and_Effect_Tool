@@ -378,6 +378,15 @@ function SideNav() {
       <a className={'nav-item' + (is('data') ? ' active' : '')} href={href('data')}>
         Imported files
       </a>
+      <div className="credit">
+        <span>Developed by</span>
+        <strong>Mohamed Badr</strong>
+        <span className="credit-links">
+          <a href="https://mohamed-badr-nine.vercel.app/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://www.linkedin.com/in/mohamed-badr-95283b278" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </span>
+      </div>
     </>
   );
 }
