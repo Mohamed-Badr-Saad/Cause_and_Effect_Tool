@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { TemplateButton } from './components/TemplateButton';
 import { AppCtx, useApp, type AppState, type Toast } from './lib/context';
 import { buildIndex } from './lib/ceIndex';
 import { emptyDataset, type Dataset } from './lib/model';
@@ -323,6 +324,7 @@ function TopBar({
         <button className="btn" onClick={openPicker} disabled={!!busy}>
           Import Excel
         </button>
+        <TemplateButton />
         <button className="icon-btn" onClick={onTheme} aria-label={themeLabel} title={themeLabel}>
           {theme === 'dark' ? (
             <svg viewBox="0 0 20 20" aria-hidden="true">

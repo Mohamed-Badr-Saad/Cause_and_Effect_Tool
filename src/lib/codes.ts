@@ -18,6 +18,8 @@ export function shortCode(code: string): string {
   const s = code.trim();
   const u = s.toUpperCase();
   if (u.length <= 2 || u === '(X)') return s;
+  const cond = /^X\s*\((\d)\)$/.exec(u);
+  if (cond) return 'X' + '⁰¹²³⁴⁵⁶⁷⁸⁹'[Number(cond[1])];
   const t = u.match(/T\s*(\d+)\s*(MIN|HR|SEC|H|S|M)?/g);
   if (t && t.length > 1) return 'Tx';
   if (/^X/.test(u) && t) return 'X+';
@@ -47,6 +49,8 @@ export function describeCode(code: string): string {
   if (s === 'MC') return 'Modulate closed';
   if (s === 'X1') return 'First occurrence';
   if (s === 'X2') return 'Second occurrence';
+  const cond = /^X ?\((\d+)\)$/.exec(s);
+  if (cond) return `Action under the condition in chart note (${cond[1]})`;
   if (s === 'T3') return 'After 3 hours time delay';
   if (s === 'T') return 'After time delay (see chart notes)';
   const many = [...s.matchAll(/T ?(\d+) ?(MIN|HR|SEC|H|S)?/g)].map(fmtDelay);

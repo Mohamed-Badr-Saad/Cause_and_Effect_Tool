@@ -30,14 +30,22 @@ function detectMatrix(sheet: RawSheet): { tagRow: number; labelCol: number } | n
         if (c === 0) continue;
         const named = row.filter((x) => x && /^(set ?point|setting|range|units?|mos|sos|healthy|vot+ing|notes?|note text|role|source)$/i.test(clean(x))).length;
         if (named >= 2) continue;
-        // Need several effect tags to the right of the label to call it a matrix.
+        // Need several effect tags to the right of the label to call it a matrix. A sheet made from the app's
+        // blank template ("Description" above "TAG No.") is trusted with fewer.
         let n = 0;
         for (let k = c + 1; k < row.length && n < 3; k++) if (clean(row[k])) n++;
-        if (n >= 3) return { tagRow: r, labelCol: c };
+        const templ = r > 0 && /^DESCRIPTION$/i.test(clean(rows[r - 1]?.[c]));
+        if (n >= 3 || (templ && n >= 1)) return { tagRow: r, labelCol: c };
       }
     }
   }
   return null;
+}
+
+/** "TAG No." in C2 under "Description" with nothing filled in yet (the app's blank template). */
+function isBlankTemplate(sheet: RawSheet): boolean {
+  const rows = sheet.rows;
+  return /^TAG ?NO\.?$/i.test(clean(rows[1]?.[2])) && /^DESCRIPTION$/i.test(clean(rows[0]?.[2]));
 }
 
 function parseMatrix(sheet: RawSheet, file: string, tagRow: number, labelCol: number): { matrix: Matrix; data: PendingData[] } {
@@ -187,7 +195,14 @@ export function parseSheets(sheets: RawSheet[], file: string): ParseResult {
       res.report.push(rep);
       continue;
     }
-    rep.detail = convertedBook
+    const filled = s.rows.filter((row) => row?.some((v) => clean(v))).length;
+    rep.detail = /^how to fill$/i.test(s.name.trim())
+      ? 'Instructions of the blank C&E sheet'
+      : filled <= 1
+      ? 'Empty sheet (headers only)'
+      : isBlankTemplate(s)
+      ? 'Blank C&E sheet: fill in effect tags in row 2 and causes from row 4, then import it again'
+      : convertedBook
       ? 'Cover, legend or blank overflow page of the converted chart'
       : 'Not a C&E matrix, trip-signal list, signal data or notes sheet';
     res.report.push(rep);

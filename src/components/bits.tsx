@@ -1,3 +1,4 @@
+import { TemplateButton } from './TemplateButton';
 import { useRef, useState, type ReactNode } from 'react';
 import { classify, describeCode, shortCode } from '../lib/codes';
 import { href } from '../lib/router';
@@ -73,9 +74,12 @@ export function DropZone({ compact = false }: { compact?: boolean }) {
           trip-signals sheet, or one workbook that contains all of them.
         </p>
       </div>
-      <button className="btn primary" onClick={openPicker} disabled={!!busy}>
-        Choose files
-      </button>
+      <div className="dz-actions">
+        <button className="btn primary" onClick={openPicker} disabled={!!busy}>
+          Choose files
+        </button>
+        <TemplateButton />
+      </div>
     </div>
   );
 }

@@ -14,6 +14,16 @@ Open **`CE_Explorer.html`** (double-click it; Chrome or Edge recommended), then 
 - The file is fully self-contained (fonts included), so you can copy it to a shared drive or host it on any intranet
   web server. Each user's browser keeps its own imported data.
 
+## Start a new chart from a blank sheet
+
+**Blank C&E sheet** (top bar, and next to *Choose files* on the import area) downloads an Excel workbook that is
+already laid out the way the importer reads it. Give the chart a name and choose how many effect columns and cause
+rows you want; the workbook has the header rows, numbered effects and causes, the info columns (Section, Set point,
+Range, Units, Voting, Notes, Note text), an action-code dropdown that colours marked cells, optional **Notes** and
+**Effect data** sheets, and a **How to fill** sheet. Fill it in in Excel, then import it. A sheet made this way is
+recognised even with only one or two effects; an unfilled one is reported as "Blank C&E sheet" on the Imported files
+page. Code in `src/lib/template.ts` and `src/components/TemplateButton.tsx`.
+
 ## On a phone (installable app)
 
 When the app is hosted over HTTPS (e.g. Vercel: deploy this folder, build `npm run build`, output `dist`), it can be
