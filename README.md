@@ -14,6 +14,21 @@ Open **`CE_Explorer.html`** (double-click it; Chrome or Edge recommended), then 
 - The file is fully self-contained (fonts included), so you can copy it to a shared drive or host it on any intranet
   web server. Each user's browser keeps its own imported data.
 
+## On a phone (installable app)
+
+When the app is hosted over HTTPS (e.g. Vercel: deploy this folder, build `npm run build`, output `dist`), it can be
+installed like an app and works with no network:
+
+- **Android (Chrome):** open the link, then menu ⋮ → **Install app** (or **Add to Home screen**).
+- **iPhone (Safari):** open the link, then Share → **Add to Home Screen**.
+- Open it from the home-screen icon, tap **Import Excel** and pick the workbooks from Files, Google Drive or OneDrive.
+  They stay on the phone; after that the app works offline (in the plant, in airplane mode).
+- Updates arrive automatically the next time the app is opened with a connection.
+
+Files: `public/manifest.webmanifest` (name, icons, colours), `public/sw.js` (offline cache of the app itself, not
+of your data), `public/icons/`, `vercel.json` (keeps `sw.js` uncached so updates are picked up). Opening
+`CE_Explorer.html` straight from disk still works as before; the offline worker only runs when served over http(s).
+
 ## What it does
 
 | Old macro tool | C&E Explorer |

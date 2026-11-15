@@ -363,7 +363,19 @@ section > .grid, .trip-detail > .grid, .legend { background: var(--surface); bor
   .hero-title { font-size: 30px; }
   .dropzone { flex-direction: column; align-items: flex-start; }
   .filter { min-width: 0; flex: 1; }
+  .toolbar .filter { flex: 1 1 100%; }
+  .filters { flex-wrap: wrap; }
+  .filters .filter { flex: 1 1 140px; }
+  .trips-layout > * { min-width: 0; }
+  .trip-groups li { flex: 0 1 auto; }
+  .trip-detail { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .trip-detail > .grid { min-width: 560px; }
+  section:has(> .grid) { overflow-x: auto; }
 }
+/* matrix on phones: tag only in the row header */
+.mgrid.narrow .mr-desc, .mgrid.narrow .mr-sp, .mgrid.narrow .mr-num { display: none; }
+.mgrid.narrow .mrow { padding: 0 6px; }
+.mgrid.narrow .mcorner { padding: 8px; font-size: 11.5px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* ---------- print: just the signal and its table ---------- */

@@ -10,7 +10,8 @@ import { CodeChip, Empty } from '../components/bits';
 const CW = 30; // column width
 const RH = 26; // row height
 const HH = 168; // column header height
-const RW = 340; // row header width
+const RW_WIDE = 340; // row header width (desktop)
+const RW_NARROW = 128; // phones: tag only
 const OVERSCAN = 6;
 
 export function MatrixPage({ id, params }: { id?: string; params: URLSearchParams }) {
@@ -205,7 +206,7 @@ export function MatrixPage({ id, params }: { id?: string; params: URLSearchParam
           </>
         ) : (
           <span className="muted">
-            Point at a cell to read its cause, action and effect. Click a cell to pin it. Click a tag to open the signal.
+            Point at or tap a cell to read its cause, action and effect. Click or tap it to pin it. Click a tag to open the signal.
           </span>
         )}
       </div>
@@ -236,6 +237,14 @@ function Grid({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [view, setView] = useState({ top: 0, left: 0, w: 1200, h: 700 });
+  // on phones the row header shows the tag only, so more effect columns fit on screen
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
+  useEffect(() => {
+    const on = () => setNarrow(window.innerWidth < 640);
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  const RW = narrow ? RW_NARROW : RW_WIDE;
   const raf = useRef(0);
 
   useLayoutEffect(() => {
@@ -331,7 +340,7 @@ function Grid({
   const fci = focus ? cols.indexOf(focus.c) : -1;
 
   return (
-    <div className="mgrid" ref={ref} tabIndex={0} aria-label="Cause and effect matrix">
+    <div className={'mgrid' + (narrow ? ' narrow' : '')} ref={ref} tabIndex={0} aria-label="Cause and effect matrix">
       <div style={{ width: RW + cols.length * CW, height: HH + rows.length * RH, position: 'relative' }}>
         <div className="mhead" style={{ width: RW + cols.length * CW, height: HH }}>
           <div className="mcorner" style={{ width: RW, height: HH }}>

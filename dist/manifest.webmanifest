@@ -1,0 +1,17 @@
+{
+  "name": "C&E Explorer",
+  "short_name": "C&E Explorer",
+  "description": "Find what a signal trips, and what trips it, across imported cause & effect charts.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e3e6e9",
+  "theme_color": "#f4f5f6",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
