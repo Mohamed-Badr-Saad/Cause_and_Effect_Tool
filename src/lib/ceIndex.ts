@@ -122,7 +122,11 @@ export function buildIndex(ds: Dataset): CEIndex {
   const byCore = new Map<string, Entry[]>();
   for (const e of byKey.values()) {
     e.aliases = expandTag(e.tag);
-    for (const d of e.data) for (const v of d.values) if (v.label === 'Tag in PDF') e.aliases.push(...v.value.split(/,\s*/));
+    // tags as printed on the chart, and the individual instruments a grouped tag stands for, are searchable too
+    for (const d of e.data)
+      for (const v of d.values)
+        if (v.label === 'Tag in PDF' || v.label === 'Tag on chart' || v.label === 'Individual tags')
+          e.aliases.push(...v.value.split(/,\s*|\s+\/\s+/).filter((x) => x && !/^\(.*\)$/.test(x)));
     e.hay = (e.key + ' ' + e.descs.join(' ') + ' ' + e.aliases.join(' ')).toUpperCase();
     e.hayC = compact(e.hay);
     const core = coreTag(e.tag);

@@ -86,6 +86,10 @@ written rotated, a page written twice, descriptions split over two cells, note n
 tag spelled differently on different pages (the spelling on the lowest sheet is used; the other is shown as
 "Tag on chart"). Code in `src/lib/parseConverted.ts`.
 
+Tags written in a "Tag on chart" or "Individual tags" column (Effect data / Signal data sheets or info columns) are
+searchable too, so a renamed or grouped tag is still found by the tag printed on the chart. Subsea sequence charts can
+use step numbers (1, 2, 3 …), "3 OVR" (step with override), C1/C2 (common alarm) and HW (hardwired) as action codes.
+
 F&G tags that carry their own voting and level, such as `FZ02DGC015/16_01 2OO2 @ 49%LEL`, show that set point
 and voting automatically.
 
