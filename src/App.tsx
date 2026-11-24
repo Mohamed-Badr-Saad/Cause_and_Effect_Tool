@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TemplateButton } from './components/TemplateButton';
+import { useMedia } from './components/bits';
 import { AppCtx, useApp, type AppState, type Toast } from './lib/context';
 import { buildIndex } from './lib/ceIndex';
 import { emptyDataset, type Dataset } from './lib/model';
@@ -248,6 +249,7 @@ function TopBar({
 }) {
   const { openPicker, busy } = useApp();
   const input = useRef<HTMLInputElement>(null);
+  const phone = useMedia('(max-width: 640px)');
   const [value, setValue] = useState(query);
   const route = useRoute();
   useEffect(() => {
@@ -313,7 +315,15 @@ function TopBar({
               navigate(href('home'), true);
             }
           }}
-          placeholder={hasData ? 'Search a tag or description, e.g. XS001 or confirmed fire' : 'Import a C&E workbook to start searching'}
+          placeholder={
+            hasData
+              ? phone
+                ? 'Search tag or description'
+                : 'Search a tag or description, e.g. XS001 or confirmed fire'
+              : phone
+              ? 'Import a workbook first'
+              : 'Import a C&E workbook to start searching'
+          }
           aria-label="Search signals"
           spellCheck={false}
           autoComplete="off"
@@ -321,10 +331,13 @@ function TopBar({
         <kbd>/</kbd>
       </form>
       <div className="top-actions">
-        <button className="btn" onClick={openPicker} disabled={!!busy}>
-          Import Excel
+        <button className="btn tb-import" onClick={openPicker} disabled={!!busy} aria-label="Import Excel" title="Import Excel">
+          <svg viewBox="0 0 20 20" aria-hidden="true" className="btn-ico">
+            <path d="M10 3v10M6 9l4 4 4-4M4 16h12" />
+          </svg>
+          <span className="btn-label">Import Excel</span>
         </button>
-        <TemplateButton />
+        <TemplateButton className="btn tb-template" />
         <button className="icon-btn" onClick={onTheme} aria-label={themeLabel} title={themeLabel}>
           {theme === 'dark' ? (
             <svg viewBox="0 0 20 20" aria-hidden="true">

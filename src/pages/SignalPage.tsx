@@ -436,7 +436,11 @@ function LinkTable({
             </span>
           )}
         </td>
-        {hasValue && <td className="c-sp">{rowInfo.get(r.otherKey)?.value}</td>}
+        {hasValue && (
+          <td className="c-sp" data-label={kind === 'causes' ? 'Set point' : 'Action'}>
+            {rowInfo.get(r.otherKey)?.value}
+          </td>
+        )}
         <td className="c-sheet">{ds.matrices[r.m].name}</td>
         <td className="c-num">{r.other.num}</td>
         <td className="c-cont">

@@ -376,6 +376,8 @@ section > .grid, .trip-detail > .grid, .legend { background: var(--surface); bor
 .mgrid.narrow .mr-desc, .mgrid.narrow .mr-sp, .mgrid.narrow .mr-num { display: none; }
 .mgrid.narrow .mrow { padding: 0 6px; }
 .mgrid.narrow .mcorner { padding: 8px; font-size: 11.5px; }
+.mgrid.narrow .mcol { height: 128px; }
+.mgrid.narrow .mcol span { max-height: 112px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* ---------- print: just the signal and its table ---------- */
@@ -457,3 +459,144 @@ td.trip-match { display: table-cell; }
 .tmpl-fig figcaption { margin-top: 6px; font-size: 12.5px; color: var(--ink-3); }
 .tmpl-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
 @media (max-width: 900px) { .dz-actions { flex-direction: row; flex-wrap: wrap; } .tmpl-row { flex-direction: column; } }
+
+/* ===================================================================================================
+   Responsive layout, second pass: tablets keep the desktop flow diagram, phones get cards and compact bars.
+   Breakpoints: ≤900px drawer navigation (above), 641–900px tablet, ≤700px stacked signal overview, ≤640px phone.
+   =================================================================================================== */
+.hide-sm { display: inline; }
+.tb-import .btn-ico { width: 16px; height: 16px; stroke-width: 1.8; }
+
+/* iPhone notch / home bar when installed as an app */
+.topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+.toasts { bottom: max(16px, env(safe-area-inset-bottom)); }
+
+/* desktop: room for the full filter hints */
+.toolbar .filter { min-width: 220px; }
+.link-table .toolbar .filter { min-width: 260px; }
+
+/* tablets: the drawer nav stays, but the content is wide enough for side-by-side layouts */
+@media (min-width: 641px) and (max-width: 900px) {
+  .top-actions .btn { display: inline-flex; }
+  .top-actions .tb-template { display: none; }
+  .page { padding: 20px 20px 48px; }
+  .toolbar .filter { flex: 1 1 200px; }
+  .cell-info { grid-template-columns: 1fr auto 1fr auto; }
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  .fblock { grid-template-columns: minmax(0, 1fr) minmax(230px, 300px) minmax(0, 1fr); gap: 0; }
+  .pins.in { align-items: flex-end; padding: 6px 26px 6px 0; }
+  .pins.out { align-items: flex-start; padding: 6px 0 6px 26px; }
+  .pins::after, .pin::after, .block::before, .block::after { display: block; }
+  .pins.none::after { display: none; }
+  .result { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'tag counts' 'desc desc' 'where where'; }
+}
+
+/* stacked signal overview: the signal first, then what causes it and what it trips, as wrapping chips */
+@media (max-width: 700px) {
+  .fblock { display: flex; flex-direction: column; gap: 12px; }
+  .fblock > * { width: 100%; max-width: none; justify-self: stretch; align-self: stretch; }
+  .fblock > .block { order: -1; }
+  .pins { flex-direction: row; flex-wrap: wrap; align-items: center !important; gap: 6px; padding: 0 !important; }
+  .pins::before { flex: 0 0 100%; font: 600 12px var(--font); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-3); }
+  .pins.in::before { content: 'Caused by'; }
+  .pins.out::before { content: 'Trips'; }
+  .pin { max-width: 100%; }
+  .pin-none { padding: 0; text-align: left; }
+  .block { padding: 14px 16px 12px; }
+  .block-tag { font-size: 20px; }
+}
+
+/* phones */
+@media (max-width: 640px) {
+  .hide-sm { display: none; }
+  .topbar { gap: 8px; padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
+  .brand svg { width: 24px; height: 24px; }
+  .search { padding: 0 8px; }
+  .top-actions { gap: 2px; }
+  .top-actions .tb-template { display: none; }
+  .top-actions .tb-import { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; border-color: transparent; box-shadow: none; background: transparent; color: var(--ink-2); }
+  .top-actions .tb-import .btn-label { display: none; }
+  .top-actions .tb-import .btn-ico { width: 19px; height: 19px; }
+  .page { padding: 14px 12px 40px; }
+  .page-title { font-size: 19px; }
+  .btn { height: 36px; }
+  .filter { height: 38px; font-size: 16px; } /* 16px stops iOS zooming into the field */
+  .toolbar .filter, .link-table .toolbar .filter { min-width: 0; }
+
+  /* signal page toolbar: code chips in one swipeable row, buttons share a row */
+  .link-table .toolbar { gap: 6px; }
+  .link-table .toolbar .filter { flex: 1 1 100%; }
+  .code-filters { flex: 1 1 100%; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; scrollbar-width: none; }
+  .code-filters::-webkit-scrollbar { display: none; }
+  .code-toggle { flex: none; height: 32px; }
+  .link-table .toolbar .spacer { display: none; }
+  .link-table .toolbar select { flex: 1 1 auto; height: 36px; }
+  .tabs { overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; padding: 10px 12px; }
+
+  /* result tables become one card per row */
+  .table-wrap { overflow: visible; }
+  .link-table .grid, .link-table .grid tbody, .trip-detail .grid, .trip-detail .grid tbody, .chain-ends .grid, .chain-ends .grid tbody { display: block; min-width: 0 !important; }
+  .link-table .grid thead, .trip-detail .grid thead, .chain-ends .grid thead { display: none; }
+  .link-table .grid tr, .trip-detail .grid tr, .chain-ends .grid tr {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 8px; row-gap: 3px; align-items: start;
+    grid-template-areas: 'code tag num' 'desc desc desc' 'sp sp sp' 'sheet sheet sheet' 'cont cont cont';
+    padding: 9px 12px; border-top: 1px solid var(--line-2);
+  }
+  .link-table .grid tr:first-child, .trip-detail .grid tr:first-child { border-top: 0; }
+  .link-table .grid td, .trip-detail .grid td, .chain-ends .grid td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+  .grid td.c-code { grid-area: code; }
+  .grid td.c-tag { grid-area: tag; overflow-wrap: anywhere; }
+  .grid td.c-num { grid-area: num; color: var(--ink-3); font-size: 12px; }
+  .grid td.c-num:not(:empty)::before { content: 'No. '; font-family: var(--font); }
+  .grid td.c-desc { grid-area: desc; color: var(--ink-2); }
+  .grid td.c-sp { grid-area: sp; font-size: 13px; }
+  .grid td.c-sp:empty { display: none; }
+  .grid td.c-sp[data-label]::before { content: attr(data-label) ': '; color: var(--ink-3); }
+  .grid td.c-sheet { grid-area: sheet; color: var(--ink-3); font-size: 12.5px; }
+  .grid td.c-cont { grid-area: cont; font-size: 13px; }
+  .grid td.c-cont:empty { display: none; }
+  .link-table .grid tr.group-row, .trip-detail .grid tr.group-row { display: block; padding: 8px 12px; background: var(--surface-2); }
+  .trip-detail > .grid { min-width: 0; }
+  .trip-detail { overflow-x: visible; }
+
+  /* trip signals: groups as one swipeable row of chips */
+  .trip-groups { flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .trip-groups::-webkit-scrollbar { display: none; }
+  .trip-groups li { flex: none !important; }
+
+  /* trip chain */
+  .chain { padding-left: 12px; }
+  .chain-row::before { left: -14px; width: 12px; }
+  .chain-desc { min-width: 0; flex-basis: 100%; }
+
+  /* matrix: compact head, the grid gets the height, the cell readout floats over it when a cell is chosen */
+  .matrix-page { padding: 10px 8px 0; }
+  .matrix-head { gap: 8px; margin-bottom: 8px; }
+  .matrix-head .page-title { font-size: 18px; }
+  .matrix-head .sub { font-size: 12px; margin: 2px 0 0; }
+  .matrix-head .toolbar { gap: 6px; width: 100%; }
+  .matrix-head .toolbar .filter { flex: 1 1 40%; min-width: 0; }
+  .matrix-head .toolbar .check { flex: 1 1 auto; }
+  .mgrid { min-height: 0; }
+  .cell-info.idle { display: none; }
+  .cell-info:not(.idle) {
+    position: fixed; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom)); z-index: 30; margin: 0;
+    max-height: 34vh; overflow-y: auto; gap: 4px 10px; padding: 8px 12px; font-size: 13px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    grid-template-columns: minmax(0, 1fr) auto; grid-auto-flow: row;
+  }
+  .cell-info:not(.idle) .ci-sig { grid-column: 1 / -1; min-width: 0; }
+  .cell-info:not(.idle) .ci-desc { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cell-info:not(.idle) .ci-code { grid-column: 1; justify-content: flex-start; text-align: left; flex-direction: row; gap: 8px; }
+  .cell-info:not(.idle) > .link { grid-column: 2; grid-row: 2; justify-self: end; }
+  .link-table .toolbar .btn { flex: 1 1 auto; justify-content: center; }
+  .matrix-page::after { content: ''; display: block; height: 8px; flex: none; }
+
+  /* imported files, home */
+  .hero-title { font-size: 26px; }
+  .dropzone { padding: 18px 16px; }
+  .dz-actions { width: 100%; }
+  .dz-actions .btn { flex: 1 1 auto; justify-content: center; }
+  .toasts { left: 8px; right: 8px; max-width: none; }
+}

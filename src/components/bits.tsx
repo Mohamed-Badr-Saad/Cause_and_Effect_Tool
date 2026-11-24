@@ -1,5 +1,5 @@
 import { TemplateButton } from './TemplateButton';
-import { useRef, useState, type ReactNode } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { classify, describeCode, shortCode } from '../lib/codes';
 import { href } from '../lib/router';
 import { normTag } from '../lib/tags';
@@ -106,4 +106,18 @@ export async function copyText(text: string): Promise<boolean> {
     ta.remove();
     return ok;
   }
+}
+
+/** True while the media query matches (e.g. '(max-width: 640px)'); follows window resizes and rotation. */
+export function useMedia(query: string): boolean {
+  const get = () => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches;
+  const [on, setOn] = useState(get);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const h = () => setOn(mq.matches);
+    h();
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, [query]);
+  return on;
 }

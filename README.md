@@ -35,6 +35,11 @@ installed like an app and works with no network:
   They stay on the phone; after that the app works offline (in the plant, in airplane mode).
 - Updates arrive automatically the next time the app is opened with a connection.
 
+Layout adapts to the screen: on phones the sections open from the ☰ menu, result tables turn into one card per
+row, the signal page shows the signal first with its causes and effects as chips, the matrix keeps only the tag
+column and shows the tapped cell in a panel over the grid, and long rows of filters (action codes, trip groups)
+scroll sideways. Tablets keep the side-by-side signal diagram; desktops are unchanged.
+
 Files: `public/manifest.webmanifest` (name, icons, colours), `public/sw.js` (offline cache of the app itself, not
 of your data), `public/icons/`, `vercel.json` (keeps `sw.js` uncached so updates are picked up). Opening
 `CE_Explorer.html` straight from disk still works as before; the offline worker only runs when served over http(s).

@@ -9,7 +9,8 @@ import { CodeChip, Empty } from '../components/bits';
 
 const CW = 30; // column width
 const RH = 26; // row height
-const HH = 168; // column header height
+const HH_WIDE = 168; // column header height
+const HH_NARROW = 128; // phones: shorter header leaves room for more rows
 const RW_WIDE = 340; // row header width (desktop)
 const RW_NARROW = 128; // phones: tag only
 const OVERSCAN = 6;
@@ -130,7 +131,7 @@ export function MatrixPage({ id, params }: { id?: string; params: URLSearchParam
             className="filter"
             value={cq}
             onChange={(e) => setCq(e.target.value)}
-            placeholder="Filter causes (separate several with commas)"
+            placeholder="Filter causes (commas for several)"
             aria-label="Filter causes"
           />
           <input
@@ -142,7 +143,7 @@ export function MatrixPage({ id, params }: { id?: string; params: URLSearchParam
           />
           <label className="check">
             <input type="checkbox" checked={hideEmpty} onChange={(e) => setHideEmpty(e.target.checked)} /> Hide empty
-            rows and columns
+            <span className="hide-sm"> rows and columns</span>
           </label>
           <button className="btn" onClick={exportView} disabled={!rows.length || !cols.length}>
             Export this view
@@ -245,6 +246,7 @@ function Grid({
     return () => window.removeEventListener('resize', on);
   }, []);
   const RW = narrow ? RW_NARROW : RW_WIDE;
+  const HH = narrow ? HH_NARROW : HH_WIDE;
   const raf = useRef(0);
 
   useLayoutEffect(() => {
